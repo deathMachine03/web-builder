@@ -1,35 +1,52 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSettings } from "./store/store"; // Импортируем action
-import HomePage from "./pages/HomePage.jsx";
-import EditPanel from "./components/EditPanel.jsx";
+import { fetchSettings } from "./store/store";
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import ProductPage from "./pages/ProductPage";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import EditPanel from "./components/EditPanel";
 
 function App() {
-  const [isPanelOpen, setIsPanelOpen] = useState(true); // Состояние панели редактирования
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
   const dispatch = useDispatch();
-  const siteState = useSelector((state) => state.site); // Получаем текущий state
-  const [loading, setLoading] = useState(true); // Добавляем состояние загрузки
+  const siteState = useSelector((state) => state.site);
 
-  // Загружаем данные из MongoDB в Redux при запуске приложения
   useEffect(() => {
-    dispatch(fetchSettings()).then(() => setLoading(false)); // Убираем загрузку после запроса
+    dispatch(fetchSettings());
   }, [dispatch]);
 
-  // Проверяем состояние загрузки перед рендерингом UI
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen text-lg">Загрузка...</div>;
-  }
+  console.log("🔍 Текущий Redux State:", siteState);
 
   return (
-    <div className="relative flex h-screen transition-all duration-300">
-      {/* Главная страница: ширина меняется при открытии панели */}
-      <div className={`transition-all duration-300 ${isPanelOpen ? "w-[calc(100%-18rem)]" : "w-full"}`}>
-        <HomePage />
-      </div>
+    <Router>
+      <div className="relative flex flex-col h-screen">
+        <div className="relative flex flex-grow transition-all duration-300">
+          {/* Основная часть, включая Header и Footer */}
+          <div className={`transition-all duration-300 flex flex-col ${isPanelOpen ? "w-[calc(100%-18rem)]" : "w-full "}`}>
+            {/* Статичный Header */}
+            <Header />
 
-      {/* Панель редактирования */}
-      <EditPanel isOpen={isPanelOpen} togglePanel={() => setIsPanelOpen(!isPanelOpen)} />
-    </div>
+            {/* Контейнер для страниц (растягивается на всю доступную высоту) */}
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/product/:id" element={<ProductPage />} />
+              </Routes>
+            </div>
+
+            {/* Footer - появляется при прокрутке */}
+            <Footer />
+          </div>
+
+          {/* EditPanel располагается сбоку и уменьшает ширину всего контента */}
+          <EditPanel isOpen={isPanelOpen} togglePanel={() => setIsPanelOpen(!isPanelOpen)} />
+        </div>
+      </div>
+    </Router>
   );
 }
 
