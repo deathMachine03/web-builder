@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSettings } from "../store/store";
-import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // ✅ Импорт хука для навигации
+
 
 const HomePage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate(); // ✅ Хук для перехода между страницами
     const { bgImage, text, buttonColor, buttonText } = useSelector((state) => state.site);
 
     // ✅ Загружаем настройки при первом рендере
@@ -26,6 +29,7 @@ const HomePage = () => {
                     <button
                         className="px-6 py-2 mt-5 text-white rounded-lg transition duration-300 hover:opacity-80"
                         style={{ backgroundColor: buttonColor }}
+                        onClick={() => navigate("/products")} // ✅ Переход по маршруту /products
                     >
                         {buttonText}
                     </button>
