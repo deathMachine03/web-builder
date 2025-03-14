@@ -3,33 +3,103 @@ import {
     setLogo, setBgImage, setText, setHeaderColor, setButtonColor, setButtonText,
     setFooterText, setFooterColor, setPhone, setEmail, setAddress, updateSocialLink, saveSettings,publishSettings
 } from "../store/store";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import {
+    fetchDraftProducts, addDraftProduct, updateDraftProduct, deleteDraftProduct, publishProducts
+} from "../store/productsSlice";
+import { ChevronRight, ChevronLeft, Trash2, PlusCircle } from "lucide-react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 
 const EditPanel = ({ isOpen, togglePanel }) => {
+
     const dispatch = useDispatch();
-    const { logo, bgImage, text, headerColor, buttonColor, buttonText, footerText, footerColor, phone, email, address, socialLinks } = useSelector((state) => state.site);
+    const location = useLocation();
+    
+    // ✅ Проверка текущей страницы (Главная / Товары)
+    const isHomePage = location.pathname === "/";
+    const isProductsPage = location.pathname === "/products";
 
-    const [panelHeight, setPanelHeight] = useState(window.innerHeight); // Начальная высота
-    const [updatedLinks, setUpdatedLinks] = useState(socialLinks);
+    // Данные для главной страницы
+    const { logo, bgImage, text, headerColor, buttonColor, buttonText, 
+        footerText, footerColor, phone, email, address, socialLinks 
+    } = useSelector((state) => state.site);
+    // Данные для товаров
+    const draftProducts = useSelector((state) => state.products.draftProducts);
+    const [newProduct, setNewProduct] = useState({ name: "", price: "", description: "", image: "" });
+    
+    
+    useEffect(() => {
+        dispatch(fetchDraftProducts());
+    }, [dispatch]);
 
-    // ✅ Обновляем ссылку
-    const handleChange = (id, value) => {
-        const newLinks = updatedLinks.map(link =>
-            link.id === id ? { ...link, url: value } : link
-        );
-        setUpdatedLinks(newLinks);
+    // ✅ Проверяем, есть ли уже загруженные данные, перед обновлением Redux
+    const updateState = (setter, value) => {
+        if (value !== undefined && value !== null) {
+            dispatch(setter(value));
+        }
     };
 
-    // ✅ Сохранение
-    const saveSocialLinks = () => {
-        updatedLinks.forEach(link => {
-            dispatch(updateSocialLink({ id: link.id, url: link.url }));
-        });
+    // ✅ Функции работы с товарами
+    const handleAddProduct = () => {
+        const newProduct = {
+            name: "Новый товар",   // Значение по умолчанию
+            price: 0,              // Цена по умолчанию
+            description: "",        // Описание пустое
+            image: ""              // Без изображения
+        };
+    
+        dispatch(addDraftProduct(newProduct));
+    };
+    
+
+    const handleUpdateProduct = (id, field, value) => {
+        dispatch(updateDraftProduct({ id, field, value }));
+    };
+    
+    const handleDeleteProduct = (id) => {
+        dispatch(deleteDraftProduct(id));
+    };
+
+    // ✅ Функция сохранения изменений
+    const handleSave = () => {
         dispatch(saveSettings());
     };
 
+    // ✅ Функция загрузки изображений (логотип, фон, изображения товаров)
+    const uploadFile = async (file, type, productId = null) => {
+        if (!file) return;
+    
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", type);
+    
+        try {
+            const res = await axios.post("http://localhost:5000/upload", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+    
+            if (type === "logo") dispatch(setLogo(res.data.url));
+            if (type === "bgImage") dispatch(setBgImage(res.data.url));
+            if (type === "productImage" && productId) {
+                dispatch(updateDraftProduct({ id: productId, field: "image", value: res.data.url }));
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки файла:", error);
+        }
+    };
+    
+    
+    
+    // Локальное состояние для ссылок соцсетей
+    const [updatedLinks, setUpdatedLinks] = useState(socialLinks);
+    const [panelHeight, setPanelHeight] = useState(window.innerHeight); // Начальная высота
+    
+    // ✅ Обновляем ссылку
+    const handleChange = (id, value) => {
+        dispatch(updateSocialLink({ id, url: value }));
+    };
 
     // ✅ Функция обновления высоты панели при прокрутке
     const updatePanelHeight = () => {
@@ -48,50 +118,23 @@ const EditPanel = ({ isOpen, togglePanel }) => {
             window.removeEventListener("resize", updatePanelHeight);
         };
     }, []);
-
-
-    // ✅ Проверяем, есть ли уже загруженные данные, перед обновлением Redux
-    const updateState = (setter, value) => {
-        if (value !== undefined && value !== null) {
-            dispatch(setter(value));
-        }
-    };
-
-    const uploadFile = async (file, type) => {
-        if (!file) return;
     
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("type", type); // Передаем, какой файл загружаем
     
-        try {
-            const res = await axios.post("http://localhost:5000/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" }
-            });
     
-            if (type === "logo") dispatch(setLogo(res.data.url));
-            if (type === "bgImage") dispatch(setBgImage(res.data.url));
-        } catch (error) {
-            console.error("Ошибка загрузки файла:", error);
-        }
-    };
-    
-
-    const handleSave = () => {
-        dispatch(saveSettings());
-    };
-
     return (
         <div className="relative transition-all duration-300 flex">
             {/* Панель редактирования с фиксированной высотой и скроллом */}
             <div className={`bg-white shadow-lg border-l border-gray-200 transition-all duration-300 flex flex-col 
                 ${isOpen ? "w-72" : "w-0 p-0 overflow-hidden"} max-h-screen fixed top-0 right-0 bottom-0`}>
+                
                 {isOpen && (
                     <>
                         {/* Контент со скроллом */}
                         <div className="flex-1 overflow-y-auto p-6">
                             <h2 className="text-xl font-bold mb-4">Редактирование</h2>
-
+                        {/* ✅ Настройки главной страницы */}
+                        {isHomePage && (
+                            <>
                             {/* Логотип */}
                             <div className="mb-6">
                                 <label className="block mb-2 font-semibold">Логотип</label>
@@ -186,20 +229,79 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                                     </div>
                                 ))}
                             </div>
+                            </>
+                        )}
+                         
+                        {/* ✅ Настройки товаров */}
+                        {isProductsPage && (
+                            <>
+                                <h2 className="text-xl font-bold mb-4">Товары</h2>
 
-                            <button onClick={handleSave} 
-                            className="mb-px bg-blue-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-blue-700 transition">
-                                Сохранить
-                            </button>
+                                <button onClick={handleAddProduct} className="bg-blue-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                                    <PlusCircle size={20} />
+                                    Добавить товар
+                                </button>
 
-                            <button onClick={() => dispatch(publishSettings())}
-                            className="mt-px bg-green-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-green-700 transition">
-                                Опубликовать
-                            </button>
+                                {draftProducts.map((product) => (
+                            <div key={product._id} className="border p-4 rounded-md mt-4 shadow-sm">
+                                <label className="block font-semibold">Название</label>
+                                <input 
+                                    type="text" 
+                                    value={product.name} 
+                                    onChange={(e) => handleUpdateProduct(product._id, "name", e.target.value)} 
+                                    className="w-full p-2 border rounded-md mb-2"
+                                />
 
+                                <label className="block font-semibold">Цена</label>
+                                <input 
+                                    type="number" 
+                                    value={product.price} 
+                                    onChange={(e) => handleUpdateProduct(product._id, "price", e.target.value)} 
+                                    className="w-full p-2 border rounded-md mb-2"
+                                />
+
+                                <label className="block font-semibold">Описание</label>
+                                <textarea 
+                                    value={product.description} 
+                                    onChange={(e) => handleUpdateProduct(product._id, "description", e.target.value)} 
+                                    className="w-full p-2 border rounded-md mb-2"
+                                />
+
+                                <label className="block font-semibold">Изображение</label>
+                                <input 
+                                    type="file" 
+                                    className="w-full text-sm mb-2" 
+                                    onChange={(e) => uploadFile(e.target.files[0], "productImage", product._id)} 
+                                />
+                                {product.image ? (
+                                    <img src={product.image} alt="Товар" className="mt-2 h-16 w-full object-cover rounded" />
+                                ) : (
+                                    <div className="h-16 w-full bg-gray-200 rounded flex items-center justify-center">
+                                        Нет изображения
+                                    </div>
+                                )}
+
+                                <button onClick={() => handleDeleteProduct(product._id)} className="text-red-600 flex items-center gap-2">
+                                    <Trash2 size={18} />
+                                    Удалить
+                                </button>
+                            </div>
+                        ))}
+                            </>
+                        )}
+
+                        <button onClick={handleSave} 
+                        className="mt-4 bg-blue-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-blue-700 transition">
+                            Сохранить
+                        </button>
+
+                        <button onClick={() => dispatch(publishSettings())} 
+                        className="mt-2 bg-green-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-green-700 transition">
+                            Опубликовать
+                        </button>
                         </div>
                     </>
-                )}
+                    )}
             </div>
 
             {/* Кнопка сворачивания */}
