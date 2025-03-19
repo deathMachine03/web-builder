@@ -53,11 +53,10 @@ const EditPanel = ({ isOpen, togglePanel }) => {
         dispatch(addDraftProduct(newProduct));
     };
     
-
     const handleUpdateProduct = (id, field, value) => {
-        dispatch(updateDraftProduct({ id, field, value }));
+        dispatch(updateDraftProduct({ id, updates: { [field]: value } })); // 👈 Передаем объект `updates`
     };
-    
+        
     const handleDeleteProduct = (id) => {
         dispatch(deleteDraftProduct(id));
     };
@@ -83,15 +82,14 @@ const EditPanel = ({ isOpen, togglePanel }) => {
             if (type === "logo") dispatch(setLogo(res.data.url));
             if (type === "bgImage") dispatch(setBgImage(res.data.url));
             if (type === "productImage" && productId) {
-                dispatch(updateDraftProduct({ id: productId, field: "image", value: res.data.url }));
+                dispatch(updateDraftProduct({ id: productId, updates: { imageUrl: res.data.url } })); // 👈 Теперь `imageUrl`
             }
         } catch (error) {
             console.error("Ошибка загрузки файла:", error);
         }
     };
     
-    
-    
+        
     // Локальное состояние для ссылок соцсетей
     const [updatedLinks, setUpdatedLinks] = useState(socialLinks);
     const [panelHeight, setPanelHeight] = useState(window.innerHeight); // Начальная высота

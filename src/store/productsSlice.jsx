@@ -16,19 +16,15 @@ export const addDraftProduct = createAsyncThunk("products/addDraft", async (prod
 // ✅ Обновление товара
 export const updateDraftProduct = createAsyncThunk(
     "products/updateDraftProduct",
-    async ({ id, field, value }) => {
+    async ({ id, updates }) => {
         if (!id) {
             throw new Error("Ошибка: ID товара не определён");
         }
 
-        const response = await axios.patch(`http://localhost:5000/api/products/draft/${id}`, {
-            [field]: value
-        });
-
+        const response = await axios.patch(`http://localhost:5000/api/products/draft/${id}`, updates);
         return response.data;
     }
 );
-
 
 // ✅ Удаление товара
 export const deleteDraftProduct = createAsyncThunk("products/deleteDraft", async (id) => {
@@ -56,15 +52,16 @@ const productsSlice = createSlice({
                 state.draftProducts.push(action.payload);
             })
             .addCase(updateDraftProduct.fulfilled, (state, action) => {
-                const index = state.draftProducts.findIndex(p => p.id === action.payload.id);
+                const index = state.draftProducts.findIndex(p => p._id === action.payload._id); // 👈 Исправлено
                 if (index !== -1) {
                     state.draftProducts[index] = action.payload;
                 }
             })
             .addCase(deleteDraftProduct.fulfilled, (state, action) => {
-                state.draftProducts = state.draftProducts.filter(p => p.id !== action.payload);
+                state.draftProducts = state.draftProducts.filter(p => p._id !== action.payload); // 👈 Исправлено
             });
     }
 });
+
 
 export default productsSlice.reducer;
