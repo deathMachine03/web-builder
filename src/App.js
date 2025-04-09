@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSettings } from "./store/store";
+import WelcomePage from "./pages/WelcomePage";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductPage from "./pages/ProductPage";
@@ -32,6 +33,7 @@ function App() {
             {/* Контейнер для страниц (растягивается на всю доступную высоту) */}
             <div className="flex-1">
               <Routes>
+                <Route path="/welcome" element={<WelcomePage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/product/:id" element={<ProductPage />} />

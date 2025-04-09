@@ -1,6 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-// ✅ Импортируем reducer и экшены для сайта
 import siteReducer, { 
     fetchSettings, 
     saveSettings, 
@@ -16,23 +14,21 @@ import siteReducer, {
     setPhone, 
     setEmail, 
     setAddress, 
-    updateSocialLink 
-} from "./siteSlice";
-
-// ✅ Импортируем reducer и экшены для товаров
+    updateSocialLink } from "./siteSlice";
 import productsReducer, { 
     fetchDraftProducts, 
     addDraftProduct, 
     updateDraftProduct, 
     deleteDraftProduct, 
-    publishProducts 
-} from "./productsSlice";
+    publishProducts } from "./productsSlice";
+import productDetailsReducer from "./productDetailsSlice";
 
-// ✅ Создаем store с двумя редюсерами
 const store = configureStore({
     reducer: {
         site: siteReducer,
         products: productsReducer,
+        productDetails: productDetailsReducer,
+
     }
 });
 

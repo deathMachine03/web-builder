@@ -26,6 +26,7 @@ const ProductsPage = () => {
                     >
                         <img src={product.imageUrl || "/placeholder.png"} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
                         <h2 className="text-lg font-semibold">{product.name}</h2>
+                        <p className="text-gray-700 font-medium">Количество:{product.quantity}</p>
                         <p className="text-gray-700 font-medium">{product.price} ₸</p>
                     </Link>
                 ))}
