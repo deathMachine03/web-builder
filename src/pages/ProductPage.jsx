@@ -32,16 +32,16 @@ const ProductPage = () => {
         <div className="max-w-4xl mx-auto p-6">
             <div className="flex flex-col md:flex-row gap-6 items-start bg-white shadow rounded p-6">
                 <div className="w-full md:w-1/3">
-                    <img
-                        src={product.imageUrl || "/placeholder.png"}
-                        alt={product.name}
-                        className="rounded w-full object-cover h-64"
-                    />
+                <img
+                    src={product.imageUrl || "/placeholder.png"}
+                    alt={product.name}
+                    className="rounded w-full h-auto max-h-[500px] object-contain"
+                />
                 </div>
                 <div className="flex-1">
                     <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-                    <p className="text-gray-700 mb-4">{product.description || "Нет описания"}</p>
                     <p className="text-xl font-semibold">{product.price} ₸</p>
+                    <p className="text-gray-700 mb-4">{product.description || "Нет описания"}</p>
                 </div>
             </div>
         </div>

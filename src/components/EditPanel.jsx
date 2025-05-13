@@ -21,7 +21,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     const location = useLocation();
     
     // ✅ Проверка текущей страницы (Главная / Товары)
-    const isHomePage = location.pathname === "/";
+    const isHomePage = location.pathname === "/mysite";
     const isProductsPage = location.pathname === "/products";
     const isProductPage = location.pathname.startsWith("/product/");
     const productIdFromUrl = isProductPage ? location.pathname.split("/product/")[1] : null;
@@ -30,7 +30,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     const { logo, bgImage, text, headerColor, buttonColor, buttonText, 
         footerText, footerColor, phone, email, address, socialLinks 
     } = useSelector((state) => state.site);
-    // Данные для товаров
+    // Данные для товаров   
     const draftProducts = useSelector((state) => state.products.draftProducts);
     const product = useSelector((state) => state.productDetails.product);
     const [newProduct, setNewProduct] = useState({ name: "", price: "", description: "", image: "" });

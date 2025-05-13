@@ -10,7 +10,7 @@ const iconMap = {
 
 const Footer = () => {
     const { 
-        footerText = "© 2025 Все права защищены", 
+        footerText = "Астана 2025 ", 
         footerColor = "#1a1a1a", 
         phone = "Не указан", 
         email = "Не указан", 

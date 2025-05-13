@@ -24,7 +24,7 @@ const Header = () => {
             )}
 
 <nav className="flex space-x-6">
-   <Link to="/" className="text-lg font-semibold hover:text-blue-500">Главная</Link>
+   <Link to="/mysite" className="text-lg font-semibold hover:text-blue-500">Басты бет</Link>
    <Link to="/products" className="text-lg font-semibold hover:text-blue-500">Каталог</Link>
 </nav>
 

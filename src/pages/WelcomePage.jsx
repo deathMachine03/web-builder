@@ -11,7 +11,7 @@ const WelcomePage = () => {
         <h1 className="text-4xl font-bold mb-6 text-center">Добро пожаловать в конструктор сайта</h1>
         <p className="text-lg text-center mb-8 text-gray-700">Нажмите "Начать", чтобы перейти к редактированию</p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/register")}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition"
         >
           Начать

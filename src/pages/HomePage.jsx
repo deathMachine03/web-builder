@@ -29,7 +29,7 @@ const HomePage = () => {
                     <button
                         className="px-6 py-2 mt-5 text-white rounded-lg transition duration-300 hover:opacity-80"
                         style={{ backgroundColor: buttonColor }}
-                        onClick={() => navigate("/products")} // ✅ Переход по маршруту /products
+                        onClick={() => navigate("/products")} 
                     >
                         {buttonText}
                     </button>
