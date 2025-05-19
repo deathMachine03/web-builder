@@ -11,6 +11,11 @@ import Footer from "./components/Footer";
 import EditPanel from "./components/EditPanel";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import PrivateRoute from "./routes/PrivateRoute"; 
+import DomainSettingsPage from "./pages/DomainSettingsPage";
+
+
 
 const AppContent = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
@@ -25,7 +30,7 @@ const AppContent = () => {
   console.log("🔍 Текущий Redux State:", siteState);
 
   // Указываем маршруты, где скрываем layout
-  const hiddenLayoutRoutes = ["/welcome", "/login", "/register"];
+  const hiddenLayoutRoutes = ["/welcome", "/login", "/register", "/admin", "/domain"];
   const isMinimalPage = hiddenLayoutRoutes.includes(location.pathname);
 
   return isMinimalPage ? (
@@ -34,6 +39,9 @@ const AppContent = () => {
       <Route path="/welcome" element={<WelcomePage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/admin" element={<PrivateRoute> <AdminDashboard /> </PrivateRoute> } />
+      <Route path="/domain" element={<PrivateRoute> <DomainSettingsPage /> </PrivateRoute> } />
+
     </Routes>
   ) : (
     // Страницы с layout (Header, Footer, EditPanel)
@@ -47,9 +55,9 @@ const AppContent = () => {
           <Header />
           <div className="flex-1">
             <Routes>
-              <Route path="/mysite" element={<HomePage />} />
-              <Route path="/products" element={<ProductsPage />} />
-              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/mysite" element={<PrivateRoute> <HomePage /> </PrivateRoute>} />
+              <Route path="/products" element={<PrivateRoute> <ProductsPage /> </PrivateRoute> } />
+              <Route path="/product/:id" element={<PrivateRoute> <ProductPage /> </PrivateRoute> } />
             </Routes>
           </div>
           <Footer />

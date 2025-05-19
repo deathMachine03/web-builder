@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -46,6 +48,12 @@ const LoginPage = () => {
         >
           Войти
         </button>
+         <p className="text-center mt-4 text-sm text-gray-600">
+                  Нет аккаунта?{" "}
+                  <Link to="register" className="text-blue-600 hover:underline">
+                    Зарегистрироваться
+                  </Link>
+                </p>
       </form>
     </div>
   );

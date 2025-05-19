@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-const LoginPage = () => {
+
+const RegisterPage  = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -46,9 +48,15 @@ const LoginPage = () => {
         >
           Зарегистрироваться
         </button>
+        <p className="text-center mt-4 text-sm text-gray-600">
+          Уже есть аккаунт?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Войти
+          </Link>
+        </p>
       </form>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

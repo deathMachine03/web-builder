@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../axiosInstance";
+
 
 // ✅ Получение настроек (черновик)
 export const fetchSettings = createAsyncThunk("site/fetchSettings", async () => {

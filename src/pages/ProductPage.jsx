@@ -12,7 +12,7 @@ const ProductPage = () => {
         dispatch(fetchProductById(id));
 
         return () => {
-            dispatch(clearProduct()); // Очистить данные при размонтировании
+            dispatch(clearProduct()); 
         };
     }, [dispatch, id]);
 

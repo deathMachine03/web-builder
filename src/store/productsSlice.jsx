@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../axiosInstance";
+
 
 // ✅ Получение товаров (черновик)
 export const fetchDraftProducts = createAsyncThunk("products/fetchDraft", async () => {

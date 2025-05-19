@@ -11,7 +11,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { updateProductField, fetchProductById } from "../store/productDetailsSlice"; // 👈 обязательно импортировать
+import { updateProductField, fetchProductById } from "../store/productDetailsSlice";
 
 
 
@@ -20,7 +20,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     const dispatch = useDispatch();
     const location = useLocation();
     
-    // ✅ Проверка текущей страницы (Главная / Товары)
+    //  Проверка текущей страницы (Главная / Товары)
     const isHomePage = location.pathname === "/mysite";
     const isProductsPage = location.pathname === "/products";
     const isProductPage = location.pathname.startsWith("/product/");
@@ -50,7 +50,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     
     
 
-    // ✅ Проверяем, есть ли уже загруженные данные, перед обновлением Redux
+    //  Проверяем, есть ли уже загруженные данные, перед обновлением Redux
     const updateState = (setter, value) => {
         if (value !== undefined && value !== null) {
             dispatch(setter(value));
@@ -75,7 +75,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
         }
     };
 
-    // ✅ Функция загрузки изображений (логотип, фон, изображения товаров)
+    //  Функция загрузки изображений (логотип, фон, изображения товаров)
     const uploadFile = async (file, type, productId = null) => {
         if (!file) return;
     
@@ -117,7 +117,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     };
     
     
-    // ✅ Функция сохранения изменений
+    //  Функция сохранения изменений
     const handleSave = () => {
         dispatch(saveSettings());
     };
@@ -126,18 +126,18 @@ const EditPanel = ({ isOpen, togglePanel }) => {
     const [updatedLinks, setUpdatedLinks] = useState(socialLinks);
     const [panelHeight, setPanelHeight] = useState(window.innerHeight); // Начальная высота
     
-    // ✅ Обновляем ссылку
+    //  Обновляем ссылку
     const handleChange = (id, value) => {
         dispatch(updateSocialLink({ id, url: value }));
     };
 
-    // ✅ Функция обновления высоты панели при прокрутке
+    //  Функция обновления высоты панели при прокрутке
     const updatePanelHeight = () => {
         const newHeight = Math.max(window.innerHeight, document.documentElement.scrollHeight);
         setPanelHeight(newHeight);
     };
 
-    // ✅ Добавляем и удаляем обработчик прокрутки
+    //  Добавляем и удаляем обработчик прокрутки
     useEffect(() => {
         window.addEventListener("scroll", updatePanelHeight);
         window.addEventListener("resize", updatePanelHeight);
@@ -165,7 +165,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                 <div className="flex-1 overflow-y-auto p-6">
                   <h2 className="text-xl font-bold mb-4">Редактирование</h2>
       
-                  {/* ✅ Настройки главной страницы */}
+                  {/*  Настройки главной страницы */}
                   {isHomePage && (
                     <>
                       {/* Логотип */}
@@ -322,7 +322,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                     </>
                   )}
       
-                  {/* ✅ Настройки товаров */}
+                  {/*  Настройки товаров */}
                   {isProductsPage && (
                     <>
                       <h2 className="text-xl font-bold mb-4">Товары</h2>
@@ -330,7 +330,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                         onClick={handleAddProduct}
                         className="bg-blue-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2"
                       >
-                        <PlusCircle size={20} /> Добавить товар
+                        <PlusCircle size={20} /> Тауар қосу
                       </button>
                       {draftProducts.map((product) => (
                         <div
@@ -368,7 +368,7 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                     </>
                   )}
       
-                  {/* ✅ Настройки отдельного товара */}
+                  {/*  Настройки отдельного товара */}
                   {isProductPage && product && (
                     <>
                       <h2 className="text-xl font-bold mb-4">Товар</h2>
@@ -426,14 +426,19 @@ const EditPanel = ({ isOpen, togglePanel }) => {
                     onClick={handleSave}
                     className="mt-4 bg-blue-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-blue-700 transition"
                   >
-                    Сохранить
+                    Сақтау
                   </button>
                   <button
-                    onClick={() => dispatch(publishSettings())}
+                    onClick={() => {
+                      dispatch(publishSettings());
+                      dispatch(publishProducts());
+                    }
+                    }
                     className="mt-2 bg-green-600 text-white p-2 rounded-lg w-full text-lg font-semibold hover:bg-green-700 transition"
                   >
-                    Опубликовать
+                    Жариялау
                   </button>
+                  
                 </div>
               </>
             )}

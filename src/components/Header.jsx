@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { User, ShoppingCart } from "lucide-react";
+import { User, Globe  } from "lucide-react";
 
 
 const Header = () => {
@@ -29,8 +29,12 @@ const Header = () => {
 </nav>
 
 <div className="flex space-x-4 text-2xl">
-   <User className="cursor-pointer" />
-   <ShoppingCart className="cursor-pointer" />
+    <Link to="/login" className="text-lg font-semibold hover:text-blue-500">   
+        <User className="cursor-pointer" />
+    </Link>
+    <Link to="/domain" className="text-lg font-semibold hover:text-blue-500">   
+        <Globe className="cursor-pointer" />
+    </Link>
 </div>
     </header>
   );

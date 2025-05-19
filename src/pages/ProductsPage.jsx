@@ -9,19 +9,19 @@ const ProductsPage = () => {
 
     useEffect(() => {
         dispatch(fetchDraftProducts()).then((res) => {
-            console.log("Загруженные товары:", res.payload); // ✅ Должны видеть `imageUrl`
+            console.log("Загруженные товары:", res.payload); 
         });
     }, [dispatch]);
     
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6">Каталог товаров</h1>
+            <h1 className="text-2xl font-bold mb-6">Тауарлар каталогы</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {draftProducts.map((product) => (
                     <Link 
                         to={`/product/${product._id}`} 
-                        key={product._id}  // ✅ Используем _id вместо id
+                        key={product._id}
                         className="border rounded-lg p-4 shadow-md hover:shadow-lg transition"
                     >
                         <img src={product.imageUrl || "/placeholder.png"} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />

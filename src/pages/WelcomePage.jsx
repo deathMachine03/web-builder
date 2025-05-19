@@ -6,24 +6,33 @@ const WelcomePage = () => {
 
   return (
     <div className="flex h-screen">
-      {/* Левая часть — текст + кнопка */}
-      <div className="w-1/2 flex flex-col justify-center items-center bg-gray-100 p-10">
-        <h1 className="text-4xl font-bold mb-6 text-center">Добро пожаловать в конструктор сайта</h1>
-        <p className="text-lg text-center mb-8 text-gray-700">Нажмите "Начать", чтобы перейти к редактированию</p>
+    <div className="w-1/2 flex flex-col justify-center items-center bg-gradient-to-br from-blue-100 to-white p-10"> 
+        <h1 className="text-6xl font-bold mb-6 text-center">Веб-сайт құрастырушысына қош келдіңіз</h1>
+        <p className="text-2xl text-center mb-8 text-gray-700">Сайтты құрауды бастау үшін «Бастау» түймесін басыңыз.</p>
         <button
           onClick={() => navigate("/register")}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg text-2xl hover:bg-blue-700 transition"
         >
-          Начать
+          Бастау
         </button>
+        <p className="mt-6 text-lg text-gray-600">
+  Аккаунтыңыз бар ма?{" "}
+  <span
+    onClick={() => navigate("/login")}
+    className="text-blue-600 cursor-pointer hover:underline"
+  >
+    Кіру
+  </span>
+</p>
+
+
       </div>
 
-      {/* Правая часть — картинка */}
       <div className="w-1/2 h-full">
         <img
-          src="/your-image.jpg" // или любой путь к файлу
+          src="/images/constructor_1x.png"
           alt="Welcome"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
       </div>
     </div>
